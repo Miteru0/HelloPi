@@ -28,12 +28,15 @@ image:assets/RaspPi-Imager.png[Setup im Raspberry Pi Imager]
 
 Den Raspberry Pi mit der gerade bespielten SD-Card starten.
 
-Im Terminal-Window diesen Befehl eingeben
+Im Terminal-Window auf dem Raspberry Pi diesen Befehl eingeben.
 
 [source,shell]
 ----
-sdk update
+curl -s "https://gitlab.fhnw.ch/ip_12_preparation/hellopi5/-/raw/main/src/assembly/setup.sh?ref_type=heads" | bash
 ----
+
+Damit sind auf dem Raspberry Pi die notwendigen Konfigurationen für die IP12-Projekte vorgenommen und die Applikationen installiert. Insbesondere ist Java Version 21 installiert.
+
 
 == Installationen auf dem Entwickler-Laptop
 
