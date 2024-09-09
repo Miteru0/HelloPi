@@ -30,7 +30,7 @@
 
         <!-- Setup for the RaspPi -->
         <pi.hostname>pi4j</pi.hostname>
-        <pi.ipnumber>192.168.164.21</pi.ipnumber>  <!-- change to concrete ip-number if hostname is not unique in wlan -->
+        <pi.ipnumber>pi4j.local</pi.ipnumber>  <!-- change to concrete ip-number if hostname is not unique in wlan -->
         <pi.port>22</pi.port>
         <pi.username>pi</pi.username>
         <pi.password>pi4j</pi.password>

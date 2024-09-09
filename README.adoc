@@ -22,9 +22,34 @@ das Formular ausfüllen, mit `Git repository URL` :
 
 == Raspberry Pi vorbereiten
 
+=== IP12-Image verwenden
+
+[Linux-Image herunterladen] und z.B. auf dem Desktop Ihres Laptops ablegen.
+
+Dieses Image ist für die Anforderungen eines IP12-Projekts vorkonfiguriert. Es sind keine weiteren Installationen notwendig.
+
+Im https://www.raspberrypi.com/software/[Raspberry Pi Imager] unter `CHOOSE OS` den untersten Eintrag `Use Custom` auswählen und den gerade heruntergeladenen Image-File auswählen.
+
+image:assets/Imager_custom_os.png[Choose Custom Image]
+
+=== Linux-Image selbst erstellen
+
 Mit https://www.raspberrypi.com/software/[Raspberry Pi Imager] den Benutzer `pi` mit Passwort `pi4j` definieren und den Setup folgendermassen vervollständigen, eine SD-Card bespielen.
 
 image:assets/RaspPi-Imager.png[Setup im Raspberry Pi Imager]
+
+==== Wlan-Hotspot einrichten
+
+Der Laptop und der Raspberry Pi müssen das gleiche WLAN verwenden.
+
+Eine einfache Variante, dies sicherzustellen, ist das Aufsetzen eines Hotspots auf einem Smartphone, idealerweise mit diesen Parametern:
+
+* ssid: `Pi4J-Spot`
+* password: `MayTheSourceBeWithYou!`
+
+Auf diesen Hotspot connected sich der RaspPi mit dem vorkonfigurieten Linux-Image automatisch.
+
+==== Installation vervollständigen
 
 Den Raspberry Pi mit der gerade bespielten SD-Card starten.
 
@@ -46,7 +71,7 @@ Damit sind auf dem Raspberry Pi die notwendigen Konfigurationen für die IP12-Pr
 
 * https://git-scm.com/downloads[Git]. Als Sourcecode-Repository verwenden wir git. 
 
-* https://gitlab.fhnw.ch/[GitLab] oder https://github.com/[GitHub-Account]. Verwenden Sie ihren FHNW Gitlab oder GitHub Account. 
+* https://gitlab.fhnw.ch/[GitLab]. Verwenden Sie ihren FHNW Gitlab Account.
 
 * `ssh`. Die Verbindung zum Raspberry Pi wird mit `ssh` hergestellt. Ist normalerweise auf allen Laptops vorinstalliert.
 
@@ -64,7 +89,6 @@ Folgenden Befehl in einem Terminal eingeben:
  `shell
  export SDKMAN_DIR="$HOME/sdkman" && curl -s "https://get.sdkman.io" | bash
 `
-
 Falls Sie SDKMAN bereits früher installiert haben, müssen Sie SDKMAN auf den neuesten Stand bringen:
 
 [source,shell]
@@ -78,7 +102,7 @@ In einem neuen Terminal-Window diesen Befehl eingeben:
 
 [source,shell]
 ----
-sdk install java 17.0.9-tem
+sdk install java 21.0.4-tem
 ----
 
 Danach liegt der JDK in ihrer Home-Directory im Folder `sdkman/candidates/java`. Von dort können Sie es dann in IntelliJ als neues SDK anlegen und im Projekt verwenden.
@@ -87,7 +111,7 @@ Mit:
 
 [source,shell]
 ----
-curl -s "https://raw.githubusercontent.com/eitch/pi4j-test/develop/src/assembly/setup.sh" | bash
+sdk ls java
 ----
 
 können Sie sich auflisten lassen, welche anderen JDKs zur Installation zur Verfügung stehen.
@@ -105,16 +129,16 @@ Das sollte diese Ausgabe erzeugen
 
 [source,shell]
 ----
-openjdk version "17.0.9" 2023-10-17
-OpenJDK Runtime Environment Temurin-17.0.9+9 (build 17.0.9+9)
-OpenJDK 64-Bit Server VM Temurin-17.0.9+9 (build 17.0.9+9, mixed mode)
+openjdk version "21.0.4" 2024-07-16 LTS
+OpenJDK Runtime Environment Temurin-21.0.4+7 (build 21.0.4+7-LTS)
+OpenJDK 64-Bit Server VM Temurin-21.0.4+7 (build 21.0.4+7-LTS, mixed mode)
 ----
 
 Falls das nicht der Fall ist, muss der Default-JDK umgestellt werden. Mit SDKMAN geht das einfach:
 
 [source,shell]
 ----
-sdk default java 17.0.9-tem
+sdk default java 21.0.4-tem
 ----
 
 == Verbindung zum Raspberry Pi herstellen
@@ -126,7 +150,7 @@ Eine einfache Variante, dies sicherzustellen, ist das Aufsetzen eines Hotspots a
 * ssid: `Pi4J-Spot`
 * password: `MayTheSourceBeWithYou!`
 
-Auf diesen Hotspot connected sich der RaspPi mit dem Pi4J-Basic-OS Image automatisch und zeigt die IP-Nummer im Hintergrundbild an.
+Auf diesen Hotspot connected sich der RaspPi mit dem IP12-Image automatisch und zeigt die IP-Nummer im Hintergrundbild an.
 
 Den Laptop ebenfalls mit dem Pi4J-Spot verbinden.
 
@@ -188,19 +212,8 @@ Im Projekt sind insgesamt vier Run-Konfigurationen vordefiniert, zwei zum Starte
 - `Debug on Pi` startet das Programm auf dem Raspberry Pi im Debug-Modus.
 - `Attach to Pi Debugger` verbindet die IDE des Laptops mit dem via `Debug on Pi` gestarteten Programm. 
 
-== Die enthaltenen Beispiel-Programme
+== Das enthaltene Beispiel-Programm
 
-==== HelloFX
-
-Dient ausschliesslich der Überprüfung der JavaFX-Basis-Installation. Auf keinen Fall als Vorlage für die eigenen JavaFX-Applikationen verwenden.
-
-Zum Starten:
-- `launcher.class` im `pom.xml` auswählen
- - `<launcher.class>com.pi4j.mvc/com.pi4j.setup.HelloFX</launcher.class>`
-- mit `Run local` auf dem Laptop starten
-- mit `Run on Pi` auf dem RaspPi starten
-
-Sobald der JavaFX-Setup überprüft ist, kann HelloFX gelöscht werden.
 
 ==== Wiring
 
@@ -208,171 +221,19 @@ Die anderen Beispielprogramme verwenden eine LED und einen Button. Diese müssen
 
 image:assets/wiring_bb.png[Wiring]
 
-==== MinimalPi4J
+==== GpioTest
 
 Ist eine reine Pi4J-Applikation ohne GUI. Auch sie dient ausschliesslich der Überprüfung des Setups.
 
 Zum Starten:
 - `launcher.class` im `pom.xml` auswählen
- - `<launcher.class>com.pi4j.mvc/com.pi4j.setup.MinimalPi4J</launcher.class>`
+ - `<launcher.class>ch.fhnw.hellopi.GpioTest</launcher.class>`
 - `Run local` macht für dieses Beispiel keinen Sinn. An den Laptop sind weder Button noch LED angeschlossen.
 - mit `Run on Pi` auf dem RaspPi starten
 
-Wenn der Button gedrückt wird, wird eine entsprechende Meldung in der Konsole ausgegeben.
+Wenn der Button gedrückt wird, wird eine entsprechende Meldung in der Konsole ausgegeben und die LED leuchtet.
 
-Sobald der Pi4J-Setup überprüft ist, kann MinimalPi4J ebenfalls gelöscht werden.
 
-==== TemplateApp
-
-TemplateApp zeigt das Zusammenspiel eines JavaFX-basiertes Graphical-User-Interfaces (GUI) mit an den RaspPi angeschlossenen Sensoren und Aktuatoren, dem Physical-User-Interface (PUI).
-
-Es dient als Vorlage für Ihre eigene Applikation. Das umfasst auch die enthaltenen TestCases.
-
-Sie sollten zunächst das Beispiel kennenlernen und verstehen. Für Ihre eigene Applikation sollten Sie anschliessend die TemplateApp kopieren und entsprechend abändern, ohne dabei die Grundregeln des MVC-Konzepts zu verletzen (s.u.). 
-
-Zum Starten:
-- `launcher.class` im `pom.xml` auswählen
- - `<launcher.class>com.pi4j.mvc/com.pi4j.mvc.templateapp.AppStarter</launcher.class>`
-- mit `Run local` (oder direkt aus der IDE heraus) auf dem Laptop starten. Sinnvoll für die GUI-Entwicklung. Das PUI steht auf dem Laptop nicht zur Verfügung. Das GUI kann jedoch weitgehend ohne Einsatz des RaspPis entwickelt werden
- - in `AppStarter` kann zusätzlich noch ein rudimentärer PuiEmulator gestartet werden, so dass das Zusammenspiel zwischen GUI und PUI auch auf dem Laptop überprüft werden kann.
-- mit `Run on Pi` auf dem RaspPi starten (jetzt natürlich inklusive "echtem" PUI)
-
-==== TemplatePUIApp
-
-Das MVC-Konzept sollte auch für Applikationen ohne GUI verwendet werden.
-
-Falls Sie eine reine PUI-Applikation entwickeln oder erst später ein GUI hinzufügen wollen, sollten Sie die `TemplatePUIApp` als Vorlage nehmen.
-
-Zum Starten:
-- `launcher.class` im `pom.xml` auswählen
- - `<launcher.class>com.pi4j.mvc/com.pi4j.mvc.templatepuiapp.AppStarter</launcher.class>`
-- `Run local` ist bei reinen PUI-Applikationen nicht sinnvoll
-- mit `Run on Pi` auf dem RaspPi starten
-
-== Applikation im Debugger starten
-
-Zum Starten einer Applikation auf dem RaspPi im Debug-Mode werden die beiden Run-Konfigurationen `Debug on Pi` und `Attach to Pi Debugger` benötigt.
-
-Wichtig dabei ist die Reihenfolge, mit der die
-Konfigurationen gestartet werden:
-
-. Start von `Debug on Pi` via des *Run*-Knopfs
-. Warten bis die Konsolenausgabe meldet `Listening for transport dt_socket at address: 5005 (Attach debugger)`
-. Starten von `Attach to Pi Debugger` mit dem Debug-Knopf
-. Erst danach erscheint das GUI auf dem RaspPi-Bildschirm
-
-Nun können Sie wie gewohnt den Debugger von IntelliJ IDEA verwenden und beispielsweise Breakpoints setzen oder das Programm schrittweise ausführen.
-
-== Das MVC-Konzept
-
-Beim klassischen Model-View-Controller-Konzept sind neben der Starter-Klasse mindestens 3 Klassen beteiligt. Das Zusammenspiel dieser Klassen ist klar geregelt:
-
-image:assets/mvc-concept.png[MVC Concept]
-
-* _Model Klassen_
-* enthalten den gesamten zu visualisierenden Zustand. Wir nennen diese Klassen daher _Presentation-Model_
-* sind komplett unabhängig von Controller und View
-* _Controller Klassen_
-
-* stellen die gesamte Funktionalität, die sogenannten Actions, in Form von Methoden zur Verfügung
-* verwalten die Model-Klassen gemäss der zugrundeliegenden Business-Logik
-* haben keinen Zugriff auf die View-Klassen
-* _View Klassen_
-
-* rufen ausschliesslich Methoden auf dem Controller auf, sie "triggern Actions"
-* werden vom Model über Zustandsänderungen notifiziert
-** observieren den Status des Models
-* ändern das Model nie direkt
-* _Starter Klasse._ Ist eine Subklasse von `javafx.application.Application`. Instanziiert die drei anderen Klassen und startet die Applikation. 
-
-In unserem Fall gibt es mindestens zwei View-Klassen
-
-* _GUI Klasse._ Das Graphical-User-Interface. JavaFX-basierte Implementierung des auf dem Bildschirm angezeigten UIs.
-* _PUI Klasse._ Das Physical-User-Interface. Pi4J-basierte Implementierung der Sensoren und Aktuatoren. Verwendet Component-Klassen, wie Sie sie aus dem sogenannten https://github.com/Pi4J/pi4j-example-components.git[Pi4J Component Catalogue] kennen.
-
-GUI und PUI sind komplett voneinander getrennt, z.B. hat der GUI-Button zum Anschalten der LED keinen direkten Zugriff auf die LED-Component des PUIs. Stattdessen triggert der GUI-Button lediglich eine entsprechende Action im Controller, der wiederum die on-Property im Model auf den neuen Wert setzt. In einem separaten Schritt reagiert die LED-Component des PUIs auf diese Wertänderung und schaltet die LED an bzw. aus.
-
-GUI und PUI arbeiten mit dem identischen Controller und damit auch mit dem identischen Model. 
-
-Es ist wichtig, dass Sie dieses Konzept verstehen und für Ihr Projekt anwenden können. Gehen Sie bei Fragen auf die Fachcoaches oder OOP-Dozierenden zu.
-
-Jede Benutzer-Interaktion durchläuft im MVC-Konzept den immer gleichen Kreislauf:
-
-image:assets/mvc-interaction.png[MVC Concept]
-
-==== Projector Pattern
-
-Unsere View-Klassen, also GUI und PUI, setzen das von Prof. Dierk König veröffentlichte https://dierk.github.io/Home/projectorPattern/ProjectorPattern.html[Projector Pattern] um. 
-
-Die grundlegenden Aufgaben von GUI und PUI sind gleich. Auf Code-Ebene ist dies erkennbar:
-sie implementieren das gemeinsames Interface `Projector`, können also auf die gleiche Weise verwendet werden.
-
-Weitere Konsequenzen
-- Es können weitere UIs hinzugefügt werden, ohne dass es Code-Änderungen bei den bestehenden Klassen (ausser der Starter-Klasse) nach sich zieht.
- - Ein Beispiel dafür ist der `PuiEmulator`, der bei Bedarf zusätzlich gestartet werden kann.
-- Diese Architektur ist auch geeignet für
- - reine GUI-Applikationen und
- - reine PUI-Applikationen (siehe `TemplatePUIApp`).
-
-=== Implementierung des MVC-Konzepts
-
-Die Basis-Klassen, die für die Implementierung des MVC-Konzepts notwendig sind, sind im Package `com.pi4j.mvc.util.mvcbase`. Die Klassen sind im Code ausführlich dokumentiert. 
-
-== MultiControllerApp
-
-Ein etwas fortgeschritteneres Beispiel ist die `MultiControllerApp`. Sie zeigt den Einsatz und die Notwendigkeit von mehreren Controllern in einer Applikation.
-
-Für einen einzelnen Controller gilt:
-- jede Action wird asynchron und reihenfolgetreu ausgeführt
-- dafür hat jeder Controller eine eigene `ConcurrentTaskQueue` integriert
-- das UI wird dadurch während der Ausführung einer Action nicht blockiert
-- werden vom UI weitere Actions getriggert während eine Action gerade in Bearbeitung ist, werden diese in der `ConcurrentTaskQueue` aufgesammelt und ausgeführt, sobald die vorherigen Actions abgearbeitet sind.
-
-Für einfache Applikationen reicht ein einzelner Controller meist aus.
-
-Es gibt aber Situationen, bei denen Actions ausgeführt werden sollen, während eine andere Action noch läuft.
-
-Die `MultiControllerApp` zeigt so ein Beispiel. Es soll möglich sein, den Counter zu verändern _während die LED blinkt_ .
-- Mit einem einzigen Controller ist das nicht umsetzbar. Der Controller würde beispielsweise die 'Decrease-Action' erst ausführen, nachdem die 'Blink-Action' abgeschlossen ist.
-- Bei zwei Controllern ist es jedoch einfach: `LedController` und `CounterController` haben jeder eine `ConcurrentTaskQueue`. Actions, die die LED betreffen, werden also unabhängig von den Actions, die den Counter verändern, ausgeführt.
-- Es sollte zusätzlich ein `ApplicationController` implementiert werden, der die anderen Controller koordiniert und das für das UI sichtbare API zur Verfügung stellt.
-
-Zum Starten:
-- `launcher.class` im `pom.xml` auswählen
- - `<launcher.class>com.pi4j.mvc/com.pi4j.mvc.multicontrollerapp.AppStarter</launcher.class>`
-- mit `Run local` (oder direkt aus der IDE heraus) auf dem Laptop starten. +
- - in `AppStarter` kann zusätzlich noch ein rudimentärer PuiEmulator gestartet werden, so dass das Zusammenspiel zwischen GUI und PUI auch auf dem Laptop überprüft werden kann.
-- mit `Run on Pi` auf dem RaspPi starten
-
-== JUnit Tests
-
-Durch die klare Trennung in Model, View und Controller können grosse Teile der Applikation mittels einfachen JUnit-Tests automatisiert getestet werden. Diese Tests werden in der Regel auf dem Laptop, also nicht auf dem RaspPi, ausgeführt.
-
-==== Controller Tests
-
-Der Controller implementiert die gesamte zur Verfügung stehende Grund-Funktionalität. Er sollte mit ausführlichen TestCases automatisch überprüft werden.
-
-Dabei gilt es zu beachten, dass der Controller alle Veränderungen auf dem Model asynchron ausführt. Eine Überprüfung der Resultate ist also erst möglich, wenn die asynchrone Task beendet ist.
-
-Ein Beispiel sehen Sie in `SomeControllerTest`.
-
-==== Presentation-Model Tests
-
-Das Model ist lediglich eine Ansammlung von `ObservableValues` und bietet darüber hinaus keine weitere Funktionalität. Daher sind normalerweise auch keine weiteren TestCases notwendig.
-
-==== Tests für einzelne PUI-Components
-
-Die einzelnen PUI-Components können sehr gut via der in Pi4J integrierten `MockPlatform` getestet werden. Diese Tests werden auf dem Laptop ausgeführt. Ein RaspPi ist nicht notwendig.
-
-Beispiele für solche Component-Tests sehen Sie im https://fhnw-ip5-ip6.github.io/CrowPiGoesJavaTutorial/de/[CrowPi-Tutorial] und in diesem Projekt im Package `com.pi4j.mvc.templateapp.view.pui.components`.
-
-==== PUI Tests
-
-Das PUI ihrer Applikation kann ebenfalls gut mittels JUnit getestet werden.
-
-Auch hier müssen die Tests berücksichtigen, dass die Actions asynchron ausgeführt werden.
-
-Ein Beispiel ist `SomePUITest`.
 
 == LICENSE
 
