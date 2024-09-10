@@ -31,14 +31,12 @@ public class HelloGpio {
 		// extensions found in the application's classpath which
 		// may include 'Platforms' and 'I/O Providers'
 
-		// to get this default context you can use:
-
 		final Context pi4j = Pi4J.newAutoContext();
 
-		// Here we will create I/O interface for a (GPIO) digital output pin with default settings.
+		// here we will create I/O interface for a (GPIO) digital output pin with default settings.
 		final DigitalOutput led = pi4j.dout().create(PIN_LED);
 
-		// Here we will create I/O interface for a (GPIO) digital input pin using a DigitalInputConfig and individually settings
+		// here we will create I/O interface for a (GPIO) digital input pin using a DigitalInputConfig and individually settings
 		final DigitalInputConfig buttonConfig = DigitalInput.newConfigBuilder(pi4j)
 				.id("BCM_" + PIN_BTN)
 				.name("Button")
@@ -60,36 +58,46 @@ public class HelloGpio {
 					led.low();
                 }
 				case UNKNOWN -> logger.info("Something unknown happened!!");
-				default      -> logger.info("if something else happens, it's a bug in Pi4J, this is the state '" + e.state() + "'");
 			}
 		});
 
-		blink(led);
+		// cleanup on shutdown
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			try {
+				logger.info("Shutting down...");
+				pi4j.shutdown();
+			} catch (Exception e) {
+				logger.severe("Failed to shutdown");
+			}
+		}));
 
+		//do what you need to do
+		blink(led);
 		logger.info("Press the button to see it in action!");
 
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                logger.info("Shutting down...");
-                pi4j.shutdown();
-            } catch (Exception e) {
-                logger.severe("Failed to shutdown");
-            }
-        }));
 
+		// wait until program gets terminated
 		synchronized (Thread.currentThread()) {
 			Thread.currentThread().wait();
 		}
 	}
 
-	private static void blink(DigitalOutput led) throws InterruptedException {
+	private static void blink(DigitalOutput led){
 		led.low();
 
 		for (int i = 0; i < 3; i++) {
 			led.high();
-			Thread.sleep(500L);
+			sleep(500L);
 			led.low();
-			Thread.sleep(500L);
+			sleep(500L);
 		}
 	}
+
+	private static void sleep(long msec) {
+        try {
+			Thread.currentThread().sleep(msec);
+        } catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+        }
+    }
 }

@@ -18,4 +18,5 @@ mkdir -p ~/Downloads
 cd ~/Downloads
 wget https://cdn.azul.com/zulu/bin/zulu21.36.17-ca-jdk21.0.4-linux_arm64.deb
 sudo dpkg -i zulu21.36.17-ca-jdk21.0.4-linux_arm64.deb
+rm ~/Downloads/zulu21.36.17-ca-jdk21.0.4-linux_arm64.deb
 

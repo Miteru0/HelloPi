@@ -4,14 +4,14 @@ image:assets/FHNW.png[FHNW]
 
 Dieses Projekt wird für die Programmierausbildung im Rahmen der IP12-Projekte an der https://www.fhnw.ch/en/degree-programmes/engineering/icompetence[Fachhochschule Nordwestschweiz] (FHNW) eingesetzt.
 
-Es dient in erster Linie dazu, den notwendigen Setup auf dem Raspberry Pi und dem Entwickler Laptop zu überprüfen.
+Es dient in erster Linie dazu, den notwendigen Setup auf dem Raspberry Pi und dem Entwickler Laptop vorzunehmen und zu überprüfen.
 
 === Raspberry Pi vorbereiten
 
-Um den Raspberry Pi für ein IP12-Projekt vorzubereiten haben Sie zwei Möglichkeiten
+Um den Raspberry Pi für ein IP12-Projekt vorzubereiten haben Sie zwei Möglichkeiten:
 
-- das vorgefertigte IP12-Image verwenden (empfohlen)
-- ein Linux-Image selbst erzeugen
+* das vorgefertigte IP12-Image verwenden (empfohlen)
+* ein Linux-Image selbst erzeugen
 
 
 ==== IP12-Image verwenden
@@ -20,15 +20,26 @@ Um den Raspberry Pi für ein IP12-Projekt vorzubereiten haben Sie zwei Möglichk
 
 Dieses Image ist für die Anforderungen eines IP12-Projekts vorkonfiguriert. Es sind keine weiteren Installationen notwendig.
 
-Im https://www.raspberrypi.com/software/[Raspberry Pi Imager] unter `CHOOSE OS` den untersten Eintrag `Use Custom` auswählen und den gerade heruntergeladenen Image-File auswählen.
+- Im https://www.raspberrypi.com/software/[Raspberry Pi Imager] unter `CHOOSE OS` den untersten Eintrag `Use Custom` auswählen und den gerade heruntergeladenen Image-File auswählen.
+- Den Raspberry Pi mit der gerade bespielten SD-Card starten.
 
 image:assets/Imager_custom_os.png[Choose Custom Image]
 
+
+
 ==== Linux-Image selbst erstellen
 
-Mit https://www.raspberrypi.com/software/[Raspberry Pi Imager] den Benutzer `pi` mit Passwort `pi4j` definieren und den Setup folgendermassen vervollständigen, eine SD-Card bespielen.
+Mit https://www.raspberrypi.com/software/[Raspberry Pi Imager] eine SD-Card bespielen
+
+* Raspberry Pi Imager starten
+* Raspberry Pi Device: `RASPBERRY PI 5`
+* Operating System: `RASPBERRY PI OS (64-BIT)
+* Storage: Die SD-Card, die mit dem Linux-Image bespielt werden soll
+* EDIT SETTINGS:
+** den Benutzer `pi` mit Passwort `pi4j` definieren und den Setup folgendermassen vervollständigen.
 
 image:assets/Imager_General.png[Setup der allgemeinen Parameter Raspberry Pi Imager]
+
 image:assets/Imager_Services.png[SSH Zugang ermöglichen]
 
 ==== Wlan-Hotspot einrichten
@@ -40,7 +51,7 @@ Eine einfache Variante, dies sicherzustellen, ist das Aufsetzen eines Hotspots a
 * ssid: `Pi4J-Spot`
 * password: `MayTheSourceBeWithYou!`
 
-Auf diesen Hotspot connected sich der RaspPi mit dem vorkonfigurieten Linux-Image automatisch.
+Auf diesen Hotspot verbindet sich der RaspPi mit dem vorkonfigurieten Linux-Image automatisch.
 
 ==== Installation vervollständigen
 
@@ -53,14 +64,20 @@ Im Terminal-Window auf dem Raspberry Pi diesen Befehl eingeben.
 curl -s "https://gitlab.fhnw.ch/ip_12_preparation/hellopi5/-/raw/main/src/assembly/setup.sh?ref_type=heads" | bash
 ----
 
+TIP: Anstatt das Terminal-Window auf dem Raspberry Pi zu verwenden, können Sie sich auch via `ssh` verbinden (siehe unten).
+
 Damit sind auf dem Raspberry Pi die notwendigen Konfigurationen für die IP12-Projekte vorgenommen und die Applikationen installiert. Insbesondere ist Java Version 21 installiert.
 
 
 === Installationen auf dem Entwickler-Laptop
 
-* https://adoptium.net/?variant=openjdk21&jvmVariant=hotspot[Java 21]. Im Pi4J-Basic-OS Image ist JDK21 installiert. Daher verwenden wir diesen JDK auch auf dem Laptop. Hinweis für Mac-Benutzer: Die Verwendung von SDKMAN (s.u.) für die Installation und die Verwaltung von JDKs ist sehr empfehlenswert.
+* https://adoptium.net/?variant=openjdk21&jvmVariant=hotspot[Java 21]. In den IP12-Linux-Images ist JDK21 installiert. Daher verwenden wir diesen JDK auch auf dem Laptop.
 
-* https://www.jetbrains.com/idea/download/[IntelliJ IDEA]. Es ist wichtig, die neueste Version zu verwenden. Am besten via https://www.jetbrains.com/toolbox-app/[JetBrains Toolbox] installieren. Empfehlenswert ist die Verwendung der Ultimate Edition. Studierende erhalten, nach Anmeldung, eine kostenlose Lizenz. Registrieren Sie sich unter https://www.jetbrains.com/student/ mit Ihrer FHNW E-Mail-Adresse. Für die Community-Edition benötigt man keine Lizenz.
+TIP: Mac- und Linux-Benutzer sollten SDKMAN (s.u.) für die Installation und die Verwaltung von JDKs verwenden.
+
+* https://www.jetbrains.com/idea/download/[IntelliJ IDEA]. Es ist wichtig, die neueste Version zu verwenden. Am besten via https://www.jetbrains.com/toolbox-app/[JetBrains Toolbox] installieren. Empfehlenswert ist die Verwendung der Ultimate Edition.
+** Studierende erhalten, nach Anmeldung, eine kostenlose Lizenz. Registrieren Sie sich unter https://www.jetbrains.com/student/ mit Ihrer FHNW E-Mail-Adresse.
+** Für die Community-Edition benötigt man keine Lizenz.
 
 * https://git-scm.com/downloads[Git]. Als Sourcecode-Repository verwenden wir git. 
 
@@ -78,10 +95,14 @@ Insbesondere wenn, wie üblich, mehrere Java JDKs verwendet werden, hilft SDKMAN
 
 ==== Installation von SDKMAN
 
-Folgenden Befehl in einem Terminal eingeben:
- `shell
- export SDKMAN_DIR="$HOME/sdkman" && curl -s "https://get.sdkman.io" | bash
-`
+Falls Sie SDKMAN noch nicht installiert haben: Folgenden Befehl in einem Terminal eingeben:
+
+[source,shell]
+----
+export SDKMAN_DIR="$HOME/sdkman" && curl -s "https://get.sdkman.io" | bash
+----
+
+
 Falls Sie SDKMAN bereits früher installiert haben, müssen Sie SDKMAN auf den neuesten Stand bringen:
 
 [source,shell]
@@ -91,7 +112,7 @@ sdk update
 
 ==== Installation des JDK
 
-In einem neuen Terminal-Window diesen Befehl eingeben:
+In einem **neuen **Terminal-Window diesen Befehl eingeben:
 
 [source,shell]
 ----
@@ -118,7 +139,7 @@ In einem Terminal-Window eingeben
 java -version
 ----
 
-Das sollte diese Ausgabe erzeugen
+Das sollte diese Ausgabe erzeugen:
 
 [source,shell]
 ----
@@ -145,7 +166,7 @@ Eine einfache Variante, dies sicherzustellen, ist das Aufsetzen eines Hotspots a
 * ssid: `Pi4J-Spot`
 * password: `MayTheSourceBeWithYou!`
 
-Auf diesen Hotspot connected sich der RaspPi mit dem IP12-Image automatisch.
+Auf diesen Hotspot verbindet sich der RaspPi mit dem IP12-Image automatisch.
 
 Den Laptop ebenfalls mit dem Pi4J-Spot verbinden.
 
@@ -167,6 +188,8 @@ ssh pi@192.168.183.86
 Passwort: 'pi4j'
 ----
 
+TIP: Die IP-Nummer des Raspberry Pis erhalten Sie mit dem Kommando `hostname -I`
+
 Falls der Raspberry Pi der einzige mit dem Hotspot verbundene ist, kann `pi4j.local` anstatt der IP-Nummer verwendet werden.
 
 [source,shell]
@@ -182,7 +205,7 @@ Mit derselben IP-Nummer (oder `pi4j.local`) kann auch via VNC auf den RaspPi zug
 
 === Build System
 
-Dieses Projekt verwendet Maven, um die Applikationen zu bauen und entweder lokal auf dem Laptop oder auf dem Raspberry Pi auszuführen.
+Dieses Projekt verwendet Maven, um die Applikationen auf dem Raspberry Pi auszuführen.
 
 Die Artefakte werden dabei auf dem Laptop gebaut, anschliessend auf den Raspberry Pi kopiert und dort gestartet. Die Entwicklung direkt auf dem Raspberry Pi ist zwar ebenfalls möglich, wird aber nicht empfohlen. Besser ist es, die Applikation auf dem Laptop zu entwickeln und sie auf dem Raspberry Pi lediglich ausführen zu lassen.
 
@@ -190,15 +213,15 @@ Dazu müssen nur wenige Konfigurationen verändert werden.
 
 ==== Einstellungen im `pom.xml`
 
-* `launcher.class`: gibt an, welche Applikation gestartet werden soll. Im `pom.xml` ist bereits eine Liste von Kandidaten enthalten. Man muss nur bei der jeweils gewünschte Applikation die Kommentare entfernen.
-* `pi.hostname`: Der Hostname des Raspberry Pis, z.B. `pi4j`.
-* `pi.ipnumber`: Die aktuelle IP-Nummer des Raspberry Pi, z.B. `192.168.1.2`, wird für SCP/SSH benötigt
+* `launcher.class`: gibt an, welche Applikation gestartet werden soll.
+* `pi.hostname`: Der Hostname des Raspberry Pis, in der Regel `pi4j`.
+* `pi.ipnumber`: Die aktuelle IP-Nummer des Raspberry Pi, z.B. `192.168.1.2`, wird auch für `SSH`und `VNC` benötigt.
 
-Mit diesen Einstellungen kann die Applikation mittels Maven-Befehl auf dem Raspberry Pi gestartet werden. Besser ist es jedoch, die Run-Konfigurationen von IntelliJ zu verwenden.
+Mit diesen Einstellungen kann die Applikation mittels Maven-Befehl auf dem Raspberry Pi gestartet werden. Einfacher ist es jedoch, die Run-Konfigurationen von IntelliJ zu verwenden.
 
 ==== Die Run-Konfigurationen
 
-Im Projekt sind insgesamt vier Run-Konfigurationen vordefiniert, zwei zum Starten der Applikation, zwei zum Debuggen der Applikation auf dem RaspPi.
+Im Projekt sind insgesamt vier Run-Konfigurationen vordefiniert, zwei zum Starten, zwei zum Debuggen der Applikation auf dem RaspPi.
 - `Run on Pi` startet das Programm auf dem Raspberry Pi.
 - `Restart on Pi` startet das zuletzt gestartete Programm nochmal.
 - `Debug on Pi` startet das Programm auf dem Raspberry Pi im Debug-Modus.
@@ -214,20 +237,21 @@ image:assets/wiring_bb.png[Wiring]
 
 ==== HelloGpio
 
-`HelloGpio` ist eine minimale Pi4J-Applikation ohne GUI. Auch sie dient der Überprüfung des Setups.
+`HelloGpio` ist eine minimale Pi4J-Applikation ohne GUI. Sie dient vor allem der Überprüfung des Setups.
 
 Zum Starten:
-- `launcher.class` im `pom.xml` auswählen
- - `<launcher.class>ch.fhnw.hellopi.HelloGpio</launcher.class>`
-- `Run local` macht für dieses Beispiel keinen Sinn. An den Laptop sind weder Button noch LED angeschlossen.
-- mit `Run on Pi` auf dem RaspPi starten
+
+* `launcher.class` im `pom.xml` setzen
+** `<launcher.class>ch.fhnw.hellopi.HelloGpio</launcher.class>`
+* mit `Run on Pi` auf dem RaspPi starten
 
 Nach dem Programmstart blinkt die LED dreimal.
 
 Wenn der Button gedrückt wird, wird eine entsprechende Meldung in der Konsole ausgegeben und die LED leuchtet.
 
 === Applikation im Debugger starten
-Zum Starten einer Applikation auf dem RaspPi im Debug-Mode werden die beiden Run-Konfigurationen `Debug on Pi` und `Attach to Pi Debugger` benötigt.
+
+Zum Starten einer Applikation auf dem Raspberry Pi im Debug-Mode werden die beiden Run-Konfigurationen `Debug on Pi` und `Attach to Pi Debugger` benötigt.
 
 Wichtig dabei ist die Reihenfolge, mit der die
 Konfigurationen gestartet werden:
