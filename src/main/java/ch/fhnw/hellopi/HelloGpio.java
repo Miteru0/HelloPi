@@ -7,18 +7,15 @@ import com.pi4j.io.gpio.digital.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicReference;
+public class HelloGpio {
 
-public class GpioTest {
-
-	private static final Logger logger = LoggerFactory.getLogger(GpioTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(HelloGpio.class);
 
 	// Connect a LED to PIN 22, a button to PIN 24
 	private static final int PIN_LED = 22;
 	private static final int PIN_BTN = 24;
 
-	public static void main(String[] args) throws InterruptedException, ExecutionException {
+	public static void main(String[] args) throws InterruptedException {
 		java.util.logging.Logger logger = java.util.logging.Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
 
 		// ------------------------------------------------------------
@@ -38,11 +35,10 @@ public class GpioTest {
 
 		final Context pi4j = Pi4J.newAutoContext();
 
-		// Here we will create I/O interfaces for a (GPIO) digital output pin.
+		// Here we will create I/O interface for a (GPIO) digital output pin with default settings.
 		final DigitalOutput led = pi4j.dout().create(PIN_LED);
 
-		// Here we will create I/O interfaces for a (GPIO) digital input pin using a DigitalInputConfig
-		//
+		// Here we will create I/O interface for a (GPIO) digital input pin using a DigitalInputConfig and individually settings
 		final DigitalInputConfig buttonConfig = DigitalInput.newConfigBuilder(pi4j)
 				.id("BCM_" + PIN_BTN)
 				.name("Button")
@@ -50,28 +46,25 @@ public class GpioTest {
 				.pull(PullResistance.PULL_DOWN)
 				.debounce(3000L)
 				.build();  //don't forget to build the config
-
 		DigitalInput button = pi4j.create(buttonConfig);
 
+		//Get informed whenever the button state changes
 		button.addListener(e -> {
 			switch (e.state()) {
 				case HIGH    -> {
                     logger.info("Button was pressed!");
-					led.low();
+					led.high();
                 }
 				case LOW     -> {
                     logger.info("Button was depressed!");
-					led.high();
+					led.low();
                 }
 				case UNKNOWN -> logger.info("Something unknown happened!!");
 				default      -> logger.info("if something else happens, it's a bug in Pi4J, this is the state '" + e.state() + "'");
 			}
 		});
 
-		led.low();
-		led.high();
-		Thread.sleep(2000L);
-		led.low();
+		blink(led);
 
 		logger.info("Press the button to see it in action!");
 
@@ -86,6 +79,17 @@ public class GpioTest {
 
 		synchronized (Thread.currentThread()) {
 			Thread.currentThread().wait();
+		}
+	}
+
+	private static void blink(DigitalOutput led) throws InterruptedException {
+		led.low();
+
+		for (int i = 0; i < 3; i++) {
+			led.high();
+			Thread.sleep(500L);
+			led.low();
+			Thread.sleep(500L);
 		}
 	}
 }

@@ -23,6 +23,10 @@
 			<source>src/assembly/start.sh</source>
 			<outputDirectory>.</outputDirectory>
 		</file>
+		<file>
+			<source>src/assembly/startInDebugMode.sh</source>
+			<outputDirectory>.</outputDirectory>
+		</file>
 	</files>
 
 </assembly>

@@ -24,18 +24,19 @@
 
     <properties>
         <!-- The class that will be started, choose one and only one -->
-        <launcher.class>ch.fhnw.hellopi.GpioTest</launcher.class>
+        <launcher.class>ch.fhnw.hellopi.HelloGpio</launcher.class>
 
         <jar.name>HelloPi</jar.name>
 
         <!-- Setup for the RaspPi -->
         <pi.hostname>pi4j</pi.hostname>
-        <pi.ipnumber>pi4j.local</pi.ipnumber>  <!-- change to concrete ip-number if hostname is not unique in wlan -->
+        <pi.ipnumber>192.168.139.21</pi.ipnumber>
+        <!-- <pi.ipnumber>pi4j.local</pi.ipnumber>  --> <!-- can be used if Pi is uniquein wlan -->
         <pi.port>22</pi.port>
         <pi.username>pi</pi.username>
         <pi.password>pi4j</pi.password>
         <pi.deploydirectory>/home/pi/deploy</pi.deploydirectory>
-        <pi.jvmOptions/>
+        <pi.startScript>start.sh</pi.startScript>
 
         <!-- Java Compiler Version -->
         <java.version>21</java.version>
@@ -298,14 +299,7 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <!-- Stop all running Java processes -->
-                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
-                                                 username="${pi.username}" password="${pi.password}" trust="true"
-                                                 failonerror="false" usepty="true" useSystemIn="false"
-                                                 suppresssystemerr="true" suppresssystemout="true"
-                                                 command="pkill java"/>
-
-                                        <!-- Ensure target directory exists on RaspPi -->
+                                       <!-- Ensure target directory exists on RaspPi -->
                                         <sshexec host="${pi.ipnumber}" port="${pi.port}"
                                                  username="${pi.username}" password="${pi.password}"
                                                  trust="true" command="mkdir --parents ${pi.deploydirectory}; rm -r -f ${pi.deploydirectory}/*"/>
@@ -326,7 +320,7 @@
                                         <sshexec host="${pi.ipnumber}" port="${pi.port}"
                                                  username="${pi.username}" password="${pi.password}" trust="true"
                                                  failonerror="false" usepty="true" useSystemIn="true"
-                                                 command="${pi.deploydirectory}/${jar.name}/start.sh"/>
+                                                 command="${pi.deploydirectory}/${jar.name}/${pi.startScript}"/>
                                     </target>
                                 </configuration>
                             </execution>
@@ -358,18 +352,11 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <!-- Stop all running Java processes -->
-                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
-                                                 username="${pi.username}" password="${pi.password}" trust="true"
-                                                 failonerror="false" usepty="true" useSystemIn="false"
-                                                 suppresssystemerr="true" suppresssystemout="true"
-                                                 command="pkill java"/>
-
                                         <!-- Run application on Raspberry Pi -->
                                         <sshexec host="${pi.ipnumber}" port="${pi.port}"
                                                  username="${pi.username}" password="${pi.password}" trust="true"
                                                  failonerror="false" usepty="true" useSystemIn="true"
-                                                 command="${pi.deploydirectory}/${jar.name}/start.sh"/>
+                                                 command="${pi.deploydirectory}/${jar.name}/${pi.startScript}"/>
                                     </target>
                                 </configuration>
                             </execution>
@@ -392,9 +379,7 @@
         <profile>
             <id>debug</id>
             <properties>
-                <pi.jvmOptions>
-                    -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005
-                </pi.jvmOptions>
+                <pi.startScript>startInDebugMode.sh</pi.startScript>
             </properties>
         </profile>
     </profiles>
