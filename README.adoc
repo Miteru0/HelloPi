@@ -155,7 +155,7 @@ Mit https://www.raspberrypi.com/software/[Raspberry Pi Imager] eine SD-Card besp
 [.left]
 image:assets/Imager_General.png[Setup der allgemeinen Parameter Raspberry Pi Imager, 400]
 
-[.left]
+[.right]
 image:assets/Imager_Services.png[SSH Zugang ermöglichen, 400]
 
 IMPORTANT: Den Raspberry Pi mit der gerade bespielten SD-Card starten.
