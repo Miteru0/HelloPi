@@ -1,3 +1,14 @@
+ifndef::env-github[:icons: font]
+ifdef::env-github,env-browser[]
+endif::[]
+ifdef::env-github[]
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+
 image:assets/FHNW.png[FHNW]
 
 == Minimale Pi4J Applikation auf dem Raspberry Pi 5
@@ -6,67 +17,9 @@ Dieses Projekt wird für die Programmierausbildung im Rahmen der IP12-Projekte a
 
 Es dient in erster Linie dazu, den notwendigen Setup auf dem Raspberry Pi und dem Entwickler Laptop vorzunehmen und zu überprüfen.
 
-=== Raspberry Pi vorbereiten
+Eines der Grundprinzipien bei den IP12-Projekten besteht darin, dass die gesamte Entwicklung auf einem Entwickler-Laptop, mit IntelliJ IDEA, stattfindet. Das Programm wird auf dem Raspberry Pi lediglich ausgeführt.
 
-Um den Raspberry Pi für ein IP12-Projekt vorzubereiten haben Sie zwei Möglichkeiten:
-
-* das vorgefertigte IP12-Image verwenden (empfohlen)
-* ein Linux-Image selbst erzeugen
-
-
-==== IP12-Image verwenden
-
-[Linux-Image herunterladen] und z.B. auf dem Desktop Ihres Laptops ablegen.
-
-Dieses Image ist für die Anforderungen eines IP12-Projekts vorkonfiguriert. Es sind keine weiteren Installationen notwendig.
-
-- Im https://www.raspberrypi.com/software/[Raspberry Pi Imager] unter `CHOOSE OS` den untersten Eintrag `Use Custom` auswählen und den gerade heruntergeladenen Image-File auswählen.
-- Den Raspberry Pi mit der gerade bespielten SD-Card starten.
-
-image:assets/Imager_custom_os.png[Choose Custom Image]
-
-
-
-==== Linux-Image selbst erstellen
-
-Mit https://www.raspberrypi.com/software/[Raspberry Pi Imager] eine SD-Card bespielen
-
-* Raspberry Pi Imager starten
-* Raspberry Pi Device: `RASPBERRY PI 5`
-* Operating System: `RASPBERRY PI OS (64-BIT)
-* Storage: Die SD-Card, die mit dem Linux-Image bespielt werden soll
-* EDIT SETTINGS:
-** den Benutzer `pi` mit Passwort `pi4j` definieren und den Setup folgendermassen vervollständigen.
-
-image:assets/Imager_General.png[Setup der allgemeinen Parameter Raspberry Pi Imager]
-
-image:assets/Imager_Services.png[SSH Zugang ermöglichen]
-
-==== Wlan-Hotspot einrichten
-
-Der Laptop und der Raspberry Pi müssen das gleiche WLAN verwenden.
-
-Eine einfache Variante, dies sicherzustellen, ist das Aufsetzen eines Hotspots auf einem Smartphone, idealerweise mit diesen Parametern:
-
-* ssid: `Pi4J-Spot`
-* password: `MayTheSourceBeWithYou!`
-
-Auf diesen Hotspot verbindet sich der RaspPi mit dem vorkonfigurieten Linux-Image automatisch.
-
-==== Installation vervollständigen
-
-Den Raspberry Pi mit der gerade bespielten SD-Card starten.
-
-Im Terminal-Window auf dem Raspberry Pi diesen Befehl eingeben.
-
-[source,shell]
-----
-curl -s "https://gitlab.fhnw.ch/ip_12_preparation/hellopi5/-/raw/main/src/assembly/setup.sh?ref_type=heads" | bash
-----
-
-TIP: Anstatt das Terminal-Window auf dem Raspberry Pi zu verwenden, können Sie sich auch via `ssh` verbinden (siehe unten).
-
-Damit sind auf dem Raspberry Pi die notwendigen Konfigurationen für die IP12-Projekte vorgenommen und die Applikationen installiert. Insbesondere ist Java Version 21 installiert.
+Dieses Projekt enthält eine Anleitung wie alle dafür notwendigen Installationen auf dem Raspberry Pi und dem Entwickler-Laptop durchgeführt werden. Ausserdem enthält es ein minimales Programm mit dem der gesamte Setup überprüft werden kann.
 
 
 === Installationen auf dem Entwickler-Laptop
@@ -79,7 +32,7 @@ TIP: Mac- und Linux-Benutzer sollten SDKMAN (s.u.) für die Installation und die
 ** Studierende erhalten, nach Anmeldung, eine kostenlose Lizenz. Registrieren Sie sich unter https://www.jetbrains.com/student/ mit Ihrer FHNW E-Mail-Adresse.
 ** Für die Community-Edition benötigt man keine Lizenz.
 
-* https://git-scm.com/downloads[Git]. Als Sourcecode-Repository verwenden wir git. 
+* https://git-scm.com/downloads[Git]. Als Sourcecode-Repository verwenden wir git.
 
 * https://gitlab.fhnw.ch/[GitLab]. Verwenden Sie ihren FHNW Gitlab Account.
 
@@ -121,7 +74,7 @@ sdk install java 21.0.4-tem
 
 Danach liegt der JDK in ihrer Home-Directory im Folder `sdkman/candidates/java`. Von dort können Sie es dann in IntelliJ als neues SDK anlegen und im Projekt verwenden.
 
-Mit: 
+Mit:
 
 [source,shell]
 ----
@@ -155,6 +108,56 @@ Falls das nicht der Fall ist, muss der Default-JDK umgestellt werden. Mit SDKMAN
 sdk default java 21.0.4-tem
 ----
 
+Damit sind die notwendigen Installationen auf dem Entwickler-Laptop abgeschlossen.
+
+=== Eigenes Repository anlegen
+
+IMPORTANT: Sie sollten auf keinen Fall direkt auf diesem Repository arbeiten. Stattdessen sollten Sie ein eigenes Repository unter Ihrem FHNW GitLab-Account anlegen und dieses Template-Repository als "Quelle" importieren.
+
+==== FHNW GitLab
+
+Auf Ihrem GitLab-Account via
+
+`New Project -> Import Project -> Repo by URL`
+
+das Formular ausfüllen, mit `Git repository URL` :
+
+`https://gitlab.fhnw.ch/ip_12_preparation/hellopi5.git`
+
+Damit haben Sie eine "Kopie", auf der Sie beliebige Änderungen vornehmen können, ohne dass es Auswirkungen auf Andere hat.
+
+TIP: Legen Sie eine geeignete `Group` an, in der das neue Projekt angelegt wird.
+
+==== Projekt in IntelliJ IDEA importieren
+
+In IntelliJ IDEA via `File -> New -> Project from Version Control..` ein neues IDEA-Projekt auf Ihrem Laptop anlegen.
+
+IMPORTANT: Verwenden Sie die URL ihres eigenen, neu angelegten Repositories.
+
+Damit haben Sie ein Projekt, dass Sie sehr gut verwenden können, um neue Dinge bei der Raspberry Pi Programmierung ausprobieren können.
+
+=== Raspberry Pi vorbereiten
+
+Um den Raspberry Pi für ein IP12-Projekt vorzubereiten muss eine SD-Card mit einem Linux-Image bespielt werden und auf dem Raspberry Pi weitere Installationen vorgenommen werden.
+
+
+==== Linux-Image erstellen
+
+Mit https://www.raspberrypi.com/software/[Raspberry Pi Imager] eine SD-Card bespielen
+
+* Raspberry Pi Imager starten
+* _Raspberry Pi Device_: `RASPBERRY PI 5`
+* _Operating System_: `RASPBERRY PI OS (64-BIT)
+* _Storage_: die SD-Card, die mit dem Linux-Image bespielt werden soll
+* EDIT SETTINGS:
+** den Benutzer `pi` mit Passwort `pi4j` definieren und den Setup folgendermassen vervollständigen.
+
+image:assets/Imager_General.png[Setup der allgemeinen Parameter Raspberry Pi Imager]
+
+image:assets/Imager_Services.png[SSH Zugang ermöglichen]
+
+IMPORTANT: Den Raspberry Pi mit der gerade bespielten SD-Card starten.
+
 === Verbindung zum Raspberry Pi herstellen
 
 ==== Wlan-Hotspot einrichten
@@ -166,7 +169,7 @@ Eine einfache Variante, dies sicherzustellen, ist das Aufsetzen eines Hotspots a
 * ssid: `Pi4J-Spot`
 * password: `MayTheSourceBeWithYou!`
 
-Auf diesen Hotspot verbindet sich der RaspPi mit dem IP12-Image automatisch.
+Auf diesen Hotspot verbindet sich der Raspberry Pi mit dem IP12-Image automatisch.
 
 Den Laptop ebenfalls mit dem Pi4J-Spot verbinden.
 
@@ -198,22 +201,34 @@ ssh pi@pi4j.local
 Passwort: 'pi4j'
 ----
 
-==== Verbindung via VNC
+==== Installation vervollständigen
 
-Mit derselben IP-Nummer (oder `pi4j.local`) kann auch via VNC auf den RaspPi zugegriffen werden. Man erhält auf dem Laptop ein Fenster, das den kompletten Desktop des Raspberry Pis anzeigt. 
+Im Terminal-Window mit der SSH-Verbindung auf den Raspberry Pi oder direkt auf dem Raspberry Pi diesen Befehl eingeben.
+
+[source,shell]
+----
+curl -s "https://gitlab.fhnw.ch/ip_12_preparation/hellopi5/-/raw/main/src/assembly/setup.sh?ref_type=heads" | bash
+----
+
+Damit sind auf dem Raspberry Pi die notwendigen Konfigurationen für die IP12-Projekte vorgenommen und die Applikationen installiert. Insbesondere ist Java Version 21 installiert.
 
 
-=== Build System
+=== Verbindung via VNC
+
+Mit derselben IP-Nummer (oder `pi4j.local`) kann auch via VNC auf den RaspPi zugegriffen werden. Man erhält auf dem Laptop ein Fenster, das den kompletten Desktop des Raspberry Pis anzeigt.
+
+
+=== Entwicklungsprozess
 
 Dieses Projekt verwendet Maven, um die Applikationen auf dem Raspberry Pi auszuführen.
 
 Die Artefakte werden dabei auf dem Laptop gebaut, anschliessend auf den Raspberry Pi kopiert und dort gestartet. Die Entwicklung direkt auf dem Raspberry Pi ist zwar ebenfalls möglich, wird aber nicht empfohlen. Besser ist es, die Applikation auf dem Laptop zu entwickeln und sie auf dem Raspberry Pi lediglich ausführen zu lassen.
 
-Dazu müssen nur wenige Konfigurationen verändert werden.
+Dazu müssen nur wenige Konfigurationen vorgenommen werden.
 
 ==== Einstellungen im `pom.xml`
 
-* `launcher.class`: gibt an, welche Applikation gestartet werden soll.
+* `launcher.class`: gibt an, welche Applikation (welche Java-Klasse) gestartet werden soll.
 * `pi.hostname`: Der Hostname des Raspberry Pis, in der Regel `pi4j`.
 * `pi.ipnumber`: Die aktuelle IP-Nummer des Raspberry Pi, z.B. `192.168.1.2`, wird auch für `SSH`und `VNC` benötigt.
 
@@ -248,6 +263,14 @@ Zum Starten:
 Nach dem Programmstart blinkt die LED dreimal.
 
 Wenn der Button gedrückt wird, wird eine entsprechende Meldung in der Konsole ausgegeben und die LED leuchtet.
+
+==== Aufgaben
+
+* ändern Sie `HelloGpio` so ab, dass die LED zu Beginn 5-mal, dafür aber kürzer blinkt
+* ändern Sie das Verhalten des Buttons so ab, dass er als Schalter funktioniert.
+** Drücken bewirkt, dass die LED eingeschaltet wird.
+** Nochmaliges Drücken bewirkt, dass die LED wieder ausgeschaltet wird.
+* sobald eine Änderung funktioniert: Pushen Sie den aktuellen Stand in ihr Git-Repository.
 
 === Applikation im Debugger starten
 
