@@ -153,10 +153,10 @@ Mit https://www.raspberrypi.com/software/[Raspberry Pi Imager] eine SD-Card besp
 ** den Benutzer `pi` mit Passwort `pi4j` definieren und den Setup folgendermassen vervollständigen.
 
 [.left]
-image:assets/Imager_General.png[Setup der allgemeinen Parameter Raspberry Pi Imager, 450]
+image:assets/Imager_General.png[Setup der allgemeinen Parameter Raspberry Pi Imager, 400]
 
 [.left]
-image:assets/Imager_Services.png[SSH Zugang ermöglichen, 450]
+image:assets/Imager_Services.png[SSH Zugang ermöglichen, 400]
 
 IMPORTANT: Den Raspberry Pi mit der gerade bespielten SD-Card starten.
 
