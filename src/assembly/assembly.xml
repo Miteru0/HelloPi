@@ -11,22 +11,24 @@
 			<outputDirectory>libs</outputDirectory>
 			<filtered>false</filtered>
 		</fileSet>
-	</fileSets>
 
-	<files>
-		<file>
-			<source>${project.build.directory}/${build.finalName}.jar</source>
+		<fileSet>
+			<directory>${project.build.directory}</directory>
 			<outputDirectory>.</outputDirectory>
-			<destName>${build.finalName}.jar</destName>
-		</file>
-		<file>
-			<source>src/assembly/start.sh</source>
+			<filtered>false</filtered>
+			<includes>
+				<include>${build.finalName}.jar</include>
+			</includes>
+		</fileSet>
+
+		<fileSet>
+			<directory>src/assembly</directory>
 			<outputDirectory>.</outputDirectory>
-		</file>
-		<file>
-			<source>src/assembly/startInDebugMode.sh</source>
-			<outputDirectory>.</outputDirectory>
-		</file>
-	</files>
+			<lineEnding>unix</lineEnding>
+			<includes>
+				<include>*.sh</include>
+			</includes>
+		</fileSet>
+	</fileSets>
 
 </assembly>
