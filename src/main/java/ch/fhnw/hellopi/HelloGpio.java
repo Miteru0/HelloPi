@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 public class HelloGpio {
 
 	private static final Logger logger = LoggerFactory.getLogger(HelloGpio.class);
+	private static final boolean[] toBlink = new boolean[1];
 
 	// Connect a LED to PIN 22, a button to PIN 24
 	private static final int PIN_LED = 22;
@@ -51,11 +52,17 @@ public class HelloGpio {
 			switch (e.state()) {
 				case HIGH    -> {
                     logger.info("Button was pressed!");
-					led.high();
                 }
 				case LOW     -> {
                     logger.info("Button was depressed!");
-					led.low();
+					toBlink[0] ^= true;
+					if (toBlink[0]) {
+						led.high();
+					}
+					else {
+						led.low();
+					}
+					
                 }
 				case UNKNOWN -> logger.info("Something unknown happened!!");
 			}
@@ -85,11 +92,11 @@ public class HelloGpio {
 	private static void blink(DigitalOutput led){
 		led.low();
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 6; i++) {
 			led.high();
-			sleep(500L);
+			sleep(200L);
 			led.low();
-			sleep(500L);
+			sleep(200L);
 		}
 	}
 
