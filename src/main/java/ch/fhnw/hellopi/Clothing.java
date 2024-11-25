@@ -4,10 +4,12 @@ public class Clothing {
 
     private String name;
     private String description;
+    private String imagePath;
 
-    public Clothing(String name, String description) {
+    public Clothing(String name, String description, String imagePath) {
         this.name = name;
         this.description = description;
+        this.imagePath = imagePath;
     }
 
     public String getName() {
