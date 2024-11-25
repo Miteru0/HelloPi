@@ -3,7 +3,8 @@ package ch.fhnw.hellopi;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Map;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 import java.util.Objects;
 
 class Prototyp {
@@ -23,6 +24,25 @@ class Prototyp {
                 if(Objects.equals(scannedData, "1")) {
                     barcodeField.setText(clothes.getClothing("1").toString());
                 }
+            }
+        });
+
+        barcodeField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                String scannedData = barcodeField.getText();
+                if(Objects.equals(scannedData, "1")) {
+                    barcodeField.setText(clothes.getClothing("1").toString());
+                }
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                
             }
         });
 
