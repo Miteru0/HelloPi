@@ -24,7 +24,7 @@
 
     <properties>
         <!-- The class that will be started, choose one and only one -->
-        <launcher.class>ch.fhnw.hellopi.HelloGpio</launcher.class>
+        <launcher.class>ch.fhnw.hellopi.Prototyp</launcher.class>
 
         <jar.name>HelloPi</jar.name>
 

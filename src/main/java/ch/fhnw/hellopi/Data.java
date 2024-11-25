@@ -19,4 +19,5 @@ public enum Data {
     public void addClothing(String hashString, Clothing clothing) {
         map.put(hashString, clothing);
     }
+
 }

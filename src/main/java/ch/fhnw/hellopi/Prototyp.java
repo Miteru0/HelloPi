@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 
 class Prototyp {
@@ -20,8 +21,8 @@ class Prototyp {
         JFrame frame = new JFrame("Barcode Scanner");
         JTextField barcodeField = new JTextField(20);
         JLabel label = new JLabel("Scan a barcode:");
-        BufferedImage myPicture = ImageIO.read(new File("src/images/notFound.png"));
-        JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+        //BufferedImage myPicture = ImageIO.read(new File("src/images/notFound.png"));
+        //JLabel picLabel = new JLabel(new ImageIcon(myPicture));
 
 
         // Add an ActionListener to process the input
@@ -51,6 +52,14 @@ class Prototyp {
 
                 String scannedData = barcodeField.getText();
                 barcodeField.setText(clothes.getClothing(scannedData).toString());
+                BufferedImage picture = null;
+                try {
+                    picture = ImageIO.read(new File(clothes.getClothing(scannedData).getImagePath()));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                //picLabel.setIcon(new ImageIcon(picture));
 
             }
         });
@@ -60,9 +69,9 @@ class Prototyp {
         frame.add(label);
         label.setBounds(0, 0, 500, 300);
         frame.add(barcodeField);
-        frame.add(picLabel);
-        frame.setSize(1000, 300);
-        picLabel.setBounds(200, 200, 200, 200);
+        //frame.add(picLabel);
+        frame.setSize(1000, 1000);
+        //picLabel.setBounds(200, 200, 200, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }

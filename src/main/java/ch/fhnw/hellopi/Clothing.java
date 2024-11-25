@@ -20,6 +20,10 @@ public class Clothing {
         return description;
     }
 
+    public String getImagePath(){
+        return imagePath;
+    }
+
     @Override
     public String toString() {
         return name + ": " + description;
