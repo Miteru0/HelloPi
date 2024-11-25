@@ -8,7 +8,12 @@ public enum Data {
     private HashMap<String, Clothing> map = new HashMap<>();
 
     public Clothing getClothing(String hashString) {
-        return map.get(hashString);
+        if (map.containsKey(hashString)) {
+            return map.get(hashString);
+        }
+        else {
+            return new Clothing("404", "not found");
+        }
     }
 
     public void addClothing(String hashString, Clothing clothing) {
