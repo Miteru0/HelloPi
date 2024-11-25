@@ -12,7 +12,7 @@ public enum Data {
             return map.get(hashString);
         }
         else {
-            return new Clothing("404", "not found");
+            return new Clothing("404", "not found", "src/images/notFound.png");
         }
     }
 
